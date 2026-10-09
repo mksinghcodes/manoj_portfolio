@@ -1,6 +1,6 @@
 -- =============================================================================
 -- Migration: Portfolio Database Schema & Row Level Security (RLS)
--- Project: manoj_portfolio
+-- Project: mksingh_portfolio
 -- Platform: Supabase / PostgreSQL 15+
 -- =============================================================================
 

@@ -1,4 +1,4 @@
-# manoj_portfolio
+# mksingh_portfolio
 
 Modern, high-performance IT Portfolio Website with an integrated, password-protected Admin Dashboard.
 
