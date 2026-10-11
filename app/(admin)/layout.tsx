@@ -1,25 +1,48 @@
 import { ReactNode } from 'react';
 import { createClient } from '@/lib/supabase/server';
+import { getAuthSession } from '@/lib/auth/session';
 import { logoutAdmin } from '@/app/actions/auth';
-import { ShieldCheck, LogOut, ExternalLink } from 'lucide-react';
+import { ShieldCheck, LogOut, ExternalLink, Crown, UserCheck } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const localSession = await getAuthSession();
+  let supabaseUser = null;
+
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    supabaseUser = user;
+  } catch {
+    // Supabase unavailable or using local session
+  }
+
+  const isSuperAdmin = localSession?.role === 'SuperAdmin';
+  const displayName = localSession?.username || supabaseUser?.email || 'Admin';
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
       <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-cyan-500/10 border border-cyan-500/30 rounded-xl text-cyan-400">
-              <ShieldCheck className="w-5 h-5" />
+            <div className={`p-2 rounded-xl ${
+              isSuperAdmin 
+                ? 'bg-indigo-500/10 border border-indigo-500/30 text-indigo-400' 
+                : 'bg-cyan-500/10 border border-cyan-500/30 text-cyan-400'
+            }`}>
+              {isSuperAdmin ? <Crown className="w-5 h-5" /> : <ShieldCheck className="w-5 h-5" />}
             </div>
-            <div>
-              <span className="font-bold text-sm tracking-wide text-white">Portfolio Control Plane</span>
-              <span className="hidden sm:inline-block ml-2 text-[11px] px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-800 text-cyan-300 font-mono">
-                {user?.email}
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-sm tracking-wide text-white">
+                {isSuperAdmin ? 'CMS Master Control' : 'Portfolio Control Plane'}
+              </span>
+              <span className={`hidden sm:inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full font-mono font-semibold ${
+                isSuperAdmin 
+                  ? 'bg-indigo-950/80 border border-indigo-500/40 text-indigo-300' 
+                  : 'bg-cyan-950/80 border border-cyan-500/40 text-cyan-300'
+              }`}>
+                {isSuperAdmin ? <Crown className="w-3 h-3 text-indigo-400" /> : <UserCheck className="w-3 h-3 text-cyan-400" />}
+                <span>{displayName}</span>
               </span>
             </div>
           </div>

@@ -68,7 +68,7 @@ export function Navbar() {
             </div>
             <div className="flex flex-col text-left">
               <span className="text-xs font-bold text-white tracking-wide leading-none group-hover:text-cyan-300 transition-colors">
-                Manoj Singh
+                Manoj Kumar Singh
               </span>
               <span className="text-[10px] text-slate-400 font-medium leading-none mt-0.5">
                 Principal Architect
@@ -103,10 +103,10 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Right Action Cluster: Status Badge & Admin Portal */}
+          {/* Right Action Cluster: Status Badge & Connect CTA */}
           <div className="hidden sm:flex items-center gap-2.5">
             {/* Live Operational Beacon */}
-            <div className="hidden lg:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/30 border border-emerald-500/30 text-[11px] font-medium text-emerald-300 backdrop-blur-xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/30 border border-emerald-500/30 text-[11px] font-medium text-emerald-300 backdrop-blur-xl">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -114,25 +114,18 @@ export function Navbar() {
               Systems Operational
             </div>
 
-            {/* Admin Console Shortcut */}
-            <Link
-              href="/admin"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 hover:text-cyan-400 hover:border-cyan-500/40 backdrop-blur-xl transition-all duration-200 shadow-md"
+            {/* Direct Connect Action */}
+            <a
+              href="mailto:mksingh.codes@gmail.com"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-cyan-600/90 hover:bg-cyan-500 text-white text-xs font-semibold backdrop-blur-xl transition-all duration-200 shadow-md shadow-cyan-900/30"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-              <span>CMS Portal</span>
-            </Link>
+              <span>Get in Touch</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
           </div>
 
           {/* Mobile Hamburger Toggle */}
           <div className="flex md:hidden items-center gap-2">
-            <Link
-              href="/admin"
-              aria-label="Admin Portal"
-              className="p-2 rounded-full bg-slate-900/80 border border-slate-800 text-cyan-400"
-            >
-              <ShieldCheck className="w-4 h-4" />
-            </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle menu"
@@ -181,14 +174,14 @@ export function Navbar() {
                 <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 Systems Operational
               </div>
-              <Link
-                href="/admin"
+              <a
+                href="mailto:mksingh.codes@gmail.com"
                 onClick={() => setMobileMenuOpen(false)}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold"
               >
-                <ShieldCheck className="w-3.5 h-3.5" />
-                CMS Panel
-              </Link>
+                <span>Get in Touch</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
             </div>
           </motion.div>
         )}

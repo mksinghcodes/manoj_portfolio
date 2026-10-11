@@ -9,13 +9,31 @@ import {
   Linkedin, 
   Youtube, 
   Mail, 
-  ShieldCheck, 
   Cpu, 
   Server, 
   ArrowUpRight,
-  ExternalLink
+  ExternalLink,
+  FileDown
 } from 'lucide-react';
 import Link from 'next/link';
+
+// Custom SVG icon for X (formerly Twitter)
+function XTwitterIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 24.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
+// Custom SVG icon for Facebook
+function FacebookIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+    </svg>
+  );
+}
 
 export function Footer() {
   const [copied, setCopied] = useState(false);
@@ -97,7 +115,11 @@ export function Footer() {
               <li><Link href="#certifications" className="hover:text-cyan-400 transition-colors">Verified Credentials</Link></li>
               <li><Link href="#videos" className="hover:text-cyan-400 transition-colors">Recorded Keynotes & Talks</Link></li>
               <li><Link href="#gallery" className="hover:text-cyan-400 transition-colors">Seminar Photos</Link></li>
-              <li><Link href="/admin" className="hover:text-cyan-400 transition-colors flex items-center gap-1">CMS Control Plane <ArrowUpRight className="w-3 h-3 text-cyan-400" /></Link></li>
+              <li>
+                <a href="/assets/resume.pdf" download className="hover:text-cyan-400 transition-colors flex items-center gap-1">
+                  Curriculum Vitae <FileDown className="w-3 h-3 text-cyan-400" />
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -112,14 +134,16 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Col 4: Direct Channels */}
+          {/* Col 4: Direct Channels with username mksinghnepal */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200">Connect</h4>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200">Connect (@mksinghnepal)</h4>
             <div className="flex flex-wrap gap-2">
               {[
-                { name: 'GitHub', href: 'https://github.com/mksinghcodes', icon: Github },
-                { name: 'LinkedIn', href: 'https://linkedin.com', icon: Linkedin },
-                { name: 'YouTube', href: 'https://youtube.com', icon: Youtube },
+                { name: 'GitHub', href: 'https://github.com/mksinghnepal', icon: Github },
+                { name: 'LinkedIn', href: 'https://linkedin.com/in/mksinghnepal', icon: Linkedin },
+                { name: 'X (Twitter)', href: 'https://x.com/mksinghnepal', icon: XTwitterIcon },
+                { name: 'YouTube', href: 'https://youtube.com/@mksinghnepal', icon: Youtube },
+                { name: 'Facebook', href: 'https://facebook.com/mksinghnepal', icon: FacebookIcon },
                 { name: 'Email', href: 'mailto:mksingh.codes@gmail.com', icon: Mail },
               ].map(({ name, href, icon: Icon }) => (
                 <a
@@ -127,15 +151,16 @@ export function Footer() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={name}
+                  aria-label={`${name} (@mksinghnepal)`}
                   className="p-2 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/40 hover:text-cyan-400 transition-all text-slate-400 shadow-sm"
+                  title={`${name}: ${href}`}
                 >
                   <Icon className="w-4 h-4" />
                 </a>
               ))}
             </div>
             <p className="text-[11px] text-slate-500 pt-1">
-              Location: Remote / Global Enterprise Availability
+              Direct: <span className="text-slate-300 font-mono">@mksinghnepal</span>
             </p>
           </div>
         </div>
@@ -143,7 +168,7 @@ export function Footer() {
         {/* Bottom Metadata & System Status Bar */}
         <div className="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div className="flex items-center gap-3">
-            <span className="font-semibold text-slate-400">Manoj Singh</span>
+            <span className="font-semibold text-slate-400">Manoj Kumar Singh</span>
             <span>•</span>
             <span>© {new Date().getFullYear()} All Rights Reserved</span>
           </div>

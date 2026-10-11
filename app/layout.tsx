@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Manoj Singh | Cloud & Systems Architect',
+  title: 'Manoj Kumar Singh | Cloud & Systems Architect',
   description: 'Enterprise Cloud Infrastructure, Zero-Trust Cybersecurity, and Applied AI Engineering Portfolio.',
 };
 
