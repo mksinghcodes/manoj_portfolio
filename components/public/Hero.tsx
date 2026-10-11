@@ -27,12 +27,12 @@ export function Hero() {
     visible: { 
       opacity: 1, 
       y: 0, 
-      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } 
+      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as any } 
     },
   };
 
   return (
-    <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-slate-950 text-slate-100 pt-24 pb-16">
+    <section id="hero" className="relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-slate-950 text-slate-100 pt-24 pb-16">
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div 
           className="absolute inset-0 opacity-[0.15]" 

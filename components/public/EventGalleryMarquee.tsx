@@ -57,7 +57,7 @@ export function EventGalleryMarquee() {
   const marqueeItems = [...GALLERY_PHOTOS, ...GALLERY_PHOTOS];
 
   return (
-    <section className="py-24 bg-slate-950 text-slate-100 overflow-hidden relative">
+    <section id="gallery" className="py-24 bg-slate-950 text-slate-100 overflow-hidden relative">
       <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
