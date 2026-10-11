@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useRef } from 'react';
+import { useActionState } from 'react';
 import { 
   Award, 
   Video, 
@@ -13,9 +15,15 @@ import {
   ExternalLink,
   Plus,
   HardDrive,
-  RefreshCw
+  RefreshCw,
+  Upload,
+  Image as ImageIcon,
+  Trash2,
+  Loader2,
+  Check
 } from 'lucide-react';
 import Link from 'next/link';
+import { uploadProfilePhoto, resetProfilePhoto } from '@/app/actions/profile';
 
 interface DashboardOverviewProps {
   certificates: any[];
@@ -32,6 +40,33 @@ export function DashboardOverview({
   onSelectTab, 
   onOpenModal 
 }: DashboardOverviewProps) {
+  const [photoPreviewKey, setPhotoPreviewKey] = useState(Date.now());
+  const [imgError, setImgError] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [uploadState, formAction, isUploading] = useActionState(
+    async (prev: any, formData: FormData) => {
+      const res = await uploadProfilePhoto(prev, formData);
+      if (res?.success) {
+        setPhotoPreviewKey(Date.now());
+        setImgError(false);
+        if (fileInputRef.current) fileInputRef.current.value = '';
+      }
+      return res;
+    },
+    null
+  );
+
+  const [isResetting, setIsResetting] = useState(false);
+  const handleResetPhoto = async () => {
+    if (!confirm('Reset profile photo to default cyber architect emblem?')) return;
+    setIsResetting(true);
+    await resetProfilePhoto();
+    setPhotoPreviewKey(Date.now());
+    setImgError(true);
+    setIsResetting(false);
+  };
+
   const completedCerts = certificates.filter((c) => c.status === 'completed').length;
   const inProgressCerts = certificates.filter((c) => c.status === 'in_progress').length;
 
@@ -249,6 +284,113 @@ export function DashboardOverview({
             >
               View Public Page <ExternalLink className="w-3 h-3" />
             </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. PROFILE PHOTO MANAGEMENT CARD */}
+      <div className="p-6 rounded-3xl bg-slate-900/40 border border-slate-800/80 backdrop-blur-xl space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+              <ImageIcon className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-white">Profile Photo & Architect Emblem</h3>
+              <p className="text-xs text-slate-400">
+                Manage the profile image displayed in the Hero section of Manoj Kumar Singh&apos;s portfolio
+              </p>
+            </div>
+          </div>
+
+          <div className="text-[11px] font-mono text-slate-400 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
+            Asset Path: <span className="text-cyan-300">public/assets/profile.jpg</span>
+          </div>
+        </div>
+
+        {uploadState?.error && (
+          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs">
+            {uploadState.error}
+          </div>
+        )}
+
+        {uploadState?.success && (
+          <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2">
+            <Check className="w-4 h-4 text-emerald-400" />
+            <span>{uploadState.message}</span>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          {/* Active Preview */}
+          <div className="md:col-span-4 flex items-center gap-4">
+            <div className="relative w-28 h-28 rounded-2xl overflow-hidden bg-slate-950 border-2 border-cyan-500/40 shadow-xl shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                key={photoPreviewKey}
+                src={imgError ? '/assets/avatar-placeholder.svg' : `/assets/profile.jpg?v=${photoPreviewKey}`}
+                alt="Active Profile Preview"
+                onError={() => setImgError(true)}
+                className="w-full h-full object-cover object-top"
+              />
+              <div className="absolute top-1 right-1 bg-slate-950/80 p-0.5 rounded-full border border-cyan-500/40">
+                <CheckCircle2 className="w-3 h-3 text-cyan-400" />
+              </div>
+            </div>
+
+            <div className="space-y-1 text-xs">
+              <div className="font-bold text-white">Active Status</div>
+              <div className="text-[11px] text-emerald-400 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Displaying Live on Hero
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Supports JPG, PNG, WebP up to 10MB
+              </p>
+            </div>
+          </div>
+
+          {/* Upload Controls */}
+          <div className="md:col-span-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <form action={formAction} className="flex-1 flex items-center gap-3">
+              <input
+                ref={fileInputRef}
+                type="file"
+                name="photo"
+                accept="image/*"
+                required
+                className="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-cyan-300 hover:file:bg-slate-700 cursor-pointer bg-slate-950 border border-slate-800 rounded-xl p-1"
+              />
+
+              <button
+                type="submit"
+                disabled={isUploading}
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs transition-all disabled:opacity-50 shrink-0 shadow-md shadow-cyan-950"
+              >
+                {isUploading ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>Uploading...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Save Photo</span>
+                  </>
+                )}
+              </button>
+            </form>
+
+            <button
+              type="button"
+              onClick={handleResetPhoto}
+              disabled={isResetting}
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl border border-slate-800 bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-slate-200 text-xs transition-colors shrink-0"
+              title="Reset to default cyber avatar emblem"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Reset</span>
+            </button>
           </div>
         </div>
       </div>
